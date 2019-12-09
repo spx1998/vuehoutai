@@ -30,8 +30,8 @@ module.exports = {
             https: false,
             hotOnly: false,
             proxy: {
-                //TODO: 路径上线需要修改
                 '/': {
+                    target: 'http://39.106.81.211:9000/',
                     changeOrigin: true,
                     pathRewrite: {
                         '^/api': ''
