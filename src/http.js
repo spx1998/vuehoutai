@@ -22,7 +22,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         const status=response.status;
-        console.log(status);
         if (status === 403) {
             router.replace('/');
         }

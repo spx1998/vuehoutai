@@ -115,7 +115,7 @@
                     <el-input v-model="form2.introduce" auto-complete="off" autosize
                               :placeholder=dishIntroduce></el-input>
                 </el-form-item>
-                <el-form-item label="菜品分类" prop="status" :label-width="formLabelWidth">
+                <el-form-item label="菜品分类" prop="type" :label-width="formLabelWidth">
                     <el-select v-model="form2.type" :placeholder=dishType>
                         <el-option
                                 v-for="item in type"
@@ -125,7 +125,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="菜品状态"  prop="status" :label-width="formLabelWidth">
+                <el-form-item label="设置推荐" prop="recommend" :label-width="formLabelWidth">
+                    <el-select v-model="form2.recommend" :placeholder=recommend>
+                        <el-option
+                                v-for="item in recommendType"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="菜品状态" prop="status" :label-width="formLabelWidth">
                     <el-select v-model="form2.status" placeholder="选择状态">
                         <el-option
                                 v-for="item in options"
@@ -191,7 +201,8 @@
                     price: '',
                     vPrice: '',
                     quantity: '',
-                    status: ''
+                    status: '',
+                    recommend: ''
                 },
                 formLabelWidth: '120px',
                 tableData: [],
@@ -206,7 +217,17 @@
                 picUrl: '',
                 type: [],
                 dishType: '',
-                errorImg:'this.src="' + require('../assets/images/noPicture.png') + '"',
+                recommend: '',
+                dishTypeID: '',
+                recommendID: '',
+                recommendType: [{
+                    id: '0',
+                    name: '非推荐'
+                }, {
+                    id: '1',
+                    name: '推荐'
+                }],
+                errorImg: 'this.src="' + require('../assets/images/noPicture.png') + '"',
             }
         },
 
@@ -238,7 +259,6 @@
                 let types = JSON.parse(res.data.content);
                 ;
                 that.type = types;
-                console.log(types[0].name);
             })
         },
         methods: {
@@ -316,6 +336,13 @@
                     that.dishStatus = dish.status;
                     that.dishQuantity = dish.maxQuantity;
                     that.picUrl = 'http://39.106.81.211:81/' + dish.picUrl;
+                    that.recommendID = dish.recommend;
+                    that.dishTypeID = dish.type;
+                    if (dish.recommend === 0) {
+                        that.recommend = '非推荐';
+                    } else if (dish.recommend === 1) {
+                        that.recommend = '推荐';
+                    }
                     for (let i = 0; i < that.type.length; i++) {
                         if (that.type[i].typeID === dish.type) {
                             that.dishType = that.type[i].name;
@@ -330,11 +357,12 @@
                     dishID: dish.dishID,
                     name: that.form2.name === '' ? dish.name : that.form2.name,
                     introduce: that.form2.introduce === '' ? dish.introduce : that.form2.introduce,
-                    type: that.form2.type,
+                    type: typeof (that.form2.type) == "undefined" ? dish.type : that.form2.type,
                     price: that.form2.price === '' ? dish.price : that.form2.price,
                     vPrice: that.form2.vPrice === '' ? dish.vPrice : that.form2.vPrice,
                     status: that.form2.status === '' ? dish.status : that.form2.status,
-                    maxQuantity: that.form2.quantity === '' ? dish.maxQuantity : that.form2.quantity
+                    maxQuantity: that.form2.quantity === '' ? dish.maxQuantity : that.form2.quantity,
+                    recommend: that.form2.recommend === '' ? dish.recommend : that.form2.recommend,
                 },).then(
                     function (res) {
                         if (res.data.status === 'error') {
@@ -353,7 +381,6 @@
                 setTimeout(function () {
                     that.$router.go(0);
                 }, 150);
-
             },
             deleteWarning(row) {
                 let it = this;

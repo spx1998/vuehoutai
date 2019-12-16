@@ -34,7 +34,7 @@
                             <el-menu-item index="1-3" @click="itemClicked">订单管理</el-menu-item>
                             <el-menu-item index="1-4" @click="itemClicked">餐桌管理</el-menu-item>
                             <el-menu-item index="1-5" @click="itemClicked">分类管理</el-menu-item>
-                            <el-menu-item index="1-6" @click="itemClicked">数据统计</el-menu-item>
+<!--                            <el-menu-item index="1-6" @click="itemClicked">数据统计</el-menu-item>-->
                         </el-menu-item-group>
 
                     </el-submenu>
